@@ -1,3 +1,5 @@
+/* eslint-disable import/extensions */
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import Header from '../components/Header';
 import Search from '../components/Search';
@@ -5,46 +7,43 @@ import Categories from '../components/Categories';
 import Carousel from '../components/Carousel';
 import CarouselItem from '../components/CarouselItem';
 import Footer from '../components/Footer';
+import useInitialState from '../hooks/useInitialState.js';
+
 import '../assets/styles/App.scss';
 
-const App = () => (
-  <div className='App'>
-    <Header />
-    <Search />
+const API = 'http://localhost:3000/initialState';
 
-    <Categories title='Mi lista'>
-      <Carousel>
-        <CarouselItem />
-        <CarouselItem />
-        <CarouselItem />
-        <CarouselItem />
-        <CarouselItem />
-      </Carousel>
-    </Categories>
+const App = () => {
+  const initialState = useInitialState(API);
+  return (
+    <div className='App'>
+      <Header />
+      <Search />
+      {initialState.mylist.length > 0 && (
+        <Categories title='Mi lista'>
+          <Carousel>
+            <CarouselItem />
+          </Carousel>
+        </Categories>
+      )}
 
-    <Categories title='Tendencias'>
-      <Carousel>
-        <CarouselItem />
-        <CarouselItem />
-        <CarouselItem />
-        <CarouselItem />
-        <CarouselItem />
-      </Carousel>
-    </Categories>
+      <Categories title='Tendencias'>
+        <Carousel>
+          {initialState.trends.map((item) => <CarouselItem key={item.id} {...item} />)}
 
-    <Categories title='Originales de Platzi Video'>
-      <Carousel>
-        <CarouselItem />
-        <CarouselItem />
-        <CarouselItem />
-        <CarouselItem />
-        <CarouselItem />
-      </Carousel>
-    </Categories>
+        </Carousel>
+      </Categories>
 
-    <Footer />
+      <Categories title='Originales de Platzi Video'>
+        <Carousel>
+          {initialState.originals.map((item) => <CarouselItem key={item.id} {...item} />)}
+        </Carousel>
+      </Categories>
 
-  </div>
-);
+      <Footer />
+
+    </div>
+  );
+};
 
 export default App;

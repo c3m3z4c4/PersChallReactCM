@@ -1,8 +1,7 @@
 // Requerimos el modulo de path el Html plugin instalados
-const path = require("path");
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
 
 // Creamos un nuevo modulo que vamos a exportar con esta configuracion
 // Vamos a configurar cada unos de los elementos que necesitamos
@@ -16,11 +15,11 @@ module.exports = {
     // La instancia resolve nos ayuda a detectar el directorio donde nos encontramos y el directorio donde vamos a guardar los archivos compilados
     path: path.resolve(__dirname, 'dist'),
     // Filename nos pode un nombre al archivo compilado
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   // Este elemento resulve las extensiones que vamos a utilizar
   resolve: {
-    extensions: [".js", ".jsx"]
+    extensions: ['.js', '.jsx'],
   },
   // Modulo con las reglas necesarias
   module: {
@@ -33,40 +32,51 @@ module.exports = {
         exclude: /node_modules/,
         // Utilizamos el loader de babel instalado
         use: {
-          loader: "babel-loader"
-        }
+          loader: 'babel-loader',
+        },
       },
       {
         // Regla para trabajar con archivos html
         test: /\.html$/,
         // Utilizamos el loader de babel instalado
         use: {
-          loader: "html-loader"
-        }
+          loader: 'html-loader',
+        },
+      },
+      {
+        test: /\.(png|gif|jpg)$/,
+        use: [
+          {
+            'loader': 'file-loader',
+            options: {
+              name: 'assets/[hash].[ext]',
+            },
+          },
+        ],
       },
       {
         test: /\.(s*)css$/,
         use: [
-          { 
-              loader: MiniCssExtractPlugin.loader 
-            },
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
           'css-loader',
-          'sass-loader'
+          'sass-loader',
         ],
-      }, 
-    ]
+      },
+    ],
   },
   // Se añaden los plugins que necesitamos
   plugins: [
   // pasamo un objeto con la configuracion que necesitamos
-    
+
     new HtmlWebpackPlugin({
       //Donde esta ubicado el template que tenemos
-      template: "./public/index.html",
-      filename: "./index.html"
+      template: './public/index.html',
+      filename: './index.html',
     }),
     new MiniCssExtractPlugin({
-        filename: 'assets/[name].css',
-      })
-  ]
+      filename: 'assets/[name].css',
+    }),
+  ],
 };
